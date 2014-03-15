@@ -202,11 +202,6 @@ PRODUCT_PACKAGES += \
     Superuser \
     su
 
-# Terminal Emulator
-PRODUCT_COPY_FILES +=  \
-    vendor/jafier/proprietary/Term.apk:system/app/Term.apk \
-    vendor/jafier/proprietary/lib/armeabi/libjackpal-androidterm4.so:system/lib/libjackpal-androidterm4.so
-
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.root_access=1
 else
