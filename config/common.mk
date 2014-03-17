@@ -36,7 +36,7 @@ PRODUCT_BOOTANIMATION := vendor/jafier/prebuilt/common/bootanimation/$(TARGET_BO
 endif
 endif
 
-ifdef CM_NIGHTLY
+ifdef JAF_NIGHTLY
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.rommanager.developerid=cyanogenmodnightly
 else
@@ -76,7 +76,7 @@ endif
 
 # Copy over the changelog to the device
 PRODUCT_COPY_FILES += \
-    vendor/jafier/CHANGELOG.mkdn:system/etc/CHANGELOG-CM.txt
+    vendor/jafier/CHANGELOG.mkdn:system/etc/CHANGELOG-JAF.txt
 
 # Backup Tool
 ifneq ($(WITH_GMS),true)
@@ -117,26 +117,26 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     frameworks/base/data/keyboards/Vendor_045e_Product_028e.kl:system/usr/keylayout/Vendor_045e_Product_0719.kl
 
-# This is CM!
+# This is JAF!
 PRODUCT_COPY_FILES += \
     vendor/jafier/config/permissions/com.cyanogenmod.android.xml:system/etc/permissions/com.cyanogenmod.android.xml
 
 # T-Mobile theme engine
 include vendor/jafier/config/themes_common.mk
 
-# Required CM packages
+# Required JAF packages
 PRODUCT_PACKAGES += \
     Development \
     LatinIME \
     BluetoothExt
 
-# Optional CM packages
+# Optional JAF packages
 PRODUCT_PACKAGES += \
     VoicePlus \
     Basic \
     libemoji
 
-# Custom CM packages
+# Custom JAF packages
 PRODUCT_PACKAGES += \
     Launcher3 \
     Trebuchet \
@@ -151,12 +151,12 @@ PRODUCT_PACKAGES += \
     CMFota \
     CMAccount
 
-# CM Hardware Abstraction Framework
+# JAF Hardware Abstraction Framework
 PRODUCT_PACKAGES += \
     org.cyanogenmod.hardware \
     org.cyanogenmod.hardware.xml
 
-# Extra tools in CM
+# Extra tools in JAF
 PRODUCT_PACKAGES += \
     libsepol \
     openvpn \
@@ -220,74 +220,74 @@ PRODUCT_VERSION_MAJOR = 11
 PRODUCT_VERSION_MINOR = 0
 PRODUCT_VERSION_MAINTENANCE = 0-RC0
 
-# Set CM_BUILDTYPE from the env RELEASE_TYPE, for jenkins compat
+# Set JAF_BUILDTYPE from the env RELEASE_TYPE, for jenkins compat
 
-ifndef CM_BUILDTYPE
+ifndef JAF_BUILDTYPE
     ifdef RELEASE_TYPE
-        # Starting with "CM_" is optional
-        RELEASE_TYPE := $(shell echo $(RELEASE_TYPE) | sed -e 's|^CM_||g')
-        CM_BUILDTYPE := $(RELEASE_TYPE)
+        # Starting with "JAF_" is optional
+        RELEASE_TYPE := $(shell echo $(RELEASE_TYPE) | sed -e 's|^JAF_||g')
+        JAF_BUILDTYPE := $(RELEASE_TYPE)
     endif
 endif
 
 # Filter out random types, so it'll reset to UNOFFICIAL
-ifeq ($(filter RELEASE NIGHTLY SNAPSHOT EXPERIMENTAL,$(CM_BUILDTYPE)),)
-    CM_BUILDTYPE :=
+ifeq ($(filter RELEASE NIGHTLY SNAPSHOT EXPERIMENTAL,$(JAF_BUILDTYPE)),)
+    JAF_BUILDTYPE :=
 endif
 
-ifdef CM_BUILDTYPE
-    ifneq ($(CM_BUILDTYPE), SNAPSHOT)
-        ifdef CM_EXTRAVERSION
+ifdef JAF_BUILDTYPE
+    ifneq ($(JAF_BUILDTYPE), SNAPSHOT)
+        ifdef JAF_EXTRAVERSION
             # Force build type to EXPERIMENTAL
-            CM_BUILDTYPE := EXPERIMENTAL
-            # Remove leading dash from CM_EXTRAVERSION
-            CM_EXTRAVERSION := $(shell echo $(CM_EXTRAVERSION) | sed 's/-//')
-            # Add leading dash to CM_EXTRAVERSION
-            CM_EXTRAVERSION := -$(CM_EXTRAVERSION)
+            JAF_BUILDTYPE := EXPERIMENTAL
+            # Remove leading dash from JAF_EXTRAVERSION
+            JAF_EXTRAVERSION := $(shell echo $(JAF_EXTRAVERSION) | sed 's/-//')
+            # Add leading dash to JAF_EXTRAVERSION
+            JAF_EXTRAVERSION := -$(JAF_EXTRAVERSION)
         endif
     else
-        ifndef CM_EXTRAVERSION
+        ifndef JAF_EXTRAVERSION
             # Force build type to EXPERIMENTAL, SNAPSHOT mandates a tag
-            CM_BUILDTYPE := EXPERIMENTAL
+            JAF_BUILDTYPE := EXPERIMENTAL
         else
-            # Remove leading dash from CM_EXTRAVERSION
-            CM_EXTRAVERSION := $(shell echo $(CM_EXTRAVERSION) | sed 's/-//')
-            # Add leading dash to CM_EXTRAVERSION
-            CM_EXTRAVERSION := -$(CM_EXTRAVERSION)
+            # Remove leading dash from JAF_EXTRAVERSION
+            JAF_EXTRAVERSION := $(shell echo $(JAF_EXTRAVERSION) | sed 's/-//')
+            # Add leading dash to JAF_EXTRAVERSION
+            JAF_EXTRAVERSION := -$(JAF_EXTRAVERSION)
         endif
     endif
 else
-    CM_VERSION := Jafier-$(shell date -u +%Y%m%d)-$(CM_BUILD)$(CM_EXTRAVERSION)
+    JAF_VERSION := Jafier-$(shell date -u +%Y%m%d)-$(JAF_BUILD)$(JAF_EXTRAVERSION)
 endif
 
 PRODUCT_PROPERTY_OVERRIDES += \
-  ro.cm.version=$(CM_VERSION) \
-  ro.modversion=$(CM_VERSION) \
-  ro.cmlegal.url=http://www.cyanogenmod.org/docs/privacy
+  ro.jaf.version=$(JAF_VERSION) \
+  ro.modversion=$(JAF_VERSION) \
+  ro.jaflegal.url=http://www.cyanogenmod.org/docs/privacy
 
 -include vendor/cm-priv/keys/keys.mk
 
-CM_DISPLAY_VERSION := $(CM_VERSION)
+JAF_DISPLAY_VERSION := $(JAF_VERSION)
 
 ifneq ($(PRODUCT_DEFAULT_DEV_CERTIFICATE),)
 ifneq ($(PRODUCT_DEFAULT_DEV_CERTIFICATE),build/target/product/security/testkey)
-  ifneq ($(CM_BUILDTYPE), UNOFFICIAL)
+  ifneq ($(JAF_BUILDTYPE), UNOFFICIAL)
     ifndef TARGET_VENDOR_RELEASE_BUILD_ID
-      ifneq ($(CM_EXTRAVERSION),)
-        TARGET_VENDOR_RELEASE_BUILD_ID := $(CM_EXTRAVERSION)
+      ifneq ($(JAF_EXTRAVERSION),)
+        TARGET_VENDOR_RELEASE_BUILD_ID := $(JAF_EXTRAVERSION)
       else
         TARGET_VENDOR_RELEASE_BUILD_ID := -$(shell date -u +%Y%m%d)
       endif
     else
       TARGET_VENDOR_RELEASE_BUILD_ID := -$(TARGET_VENDOR_RELEASE_BUILD_ID)
     endif
-    CM_DISPLAY_VERSION=$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR)$(TARGET_VENDOR_RELEASE_BUILD_ID)
+    JAF_DISPLAY_VERSION=$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR)$(TARGET_VENDOR_RELEASE_BUILD_ID)
   endif
 endif
 endif
 
 PRODUCT_PROPERTY_OVERRIDES += \
-  ro.cm.display.version=$(CM_DISPLAY_VERSION)
+  ro.cm.display.version=$(JAF_DISPLAY_VERSION)
 
 -include $(WORKSPACE)/build_env/image-auto-bits.mk
 

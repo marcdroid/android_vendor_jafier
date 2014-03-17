@@ -1,16 +1,16 @@
-# Inherit common CM stuff
+# Inherit common JAF stuff
 $(call inherit-product, vendor/jafier/config/common.mk)
 
 # Bring in all video files
 $(call inherit-product, frameworks/base/data/videos/VideoPackage2.mk)
 
-# Include CM audio files
+# Include JAF audio files
 include vendor/jafier/config/cm_audio.mk
 
-# Include CM LatinIME dictionaries
+# Include JAF LatinIME dictionaries
 PRODUCT_PACKAGE_OVERLAYS += vendor/jafier/overlay/dictionaries
 
-# Optional CM packages
+# Optional JAF packages
 PRODUCT_PACKAGES += \
     Galaxy4 \
     HoloSpiralWallpaper \
@@ -32,6 +32,6 @@ PRODUCT_PACKAGES += \
     libvideoeditor_videofilters \
     libvideoeditorplayer
 
-# Extra tools in CM
+# Extra tools in JAF
 PRODUCT_PACKAGES += \
     vim
