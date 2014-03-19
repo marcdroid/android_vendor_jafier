@@ -1,4 +1,4 @@
-PRODUCT_BRAND ?= cyanogenmod
+PRODUCT_BRAND ?= jafierroms
 
 SUPERUSER_EMBEDDED := true
 SUPERUSER_PACKAGE_PREFIX := com.android.settings.cyanogenmod.superuser
@@ -34,14 +34,6 @@ PRODUCT_BOOTANIMATION := vendor/jafier/prebuilt/common/bootanimation/halfres/$(T
 else
 PRODUCT_BOOTANIMATION := vendor/jafier/prebuilt/common/bootanimation/$(TARGET_BOOTANIMATION_NAME).zip
 endif
-endif
-
-ifdef JAF_NIGHTLY
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.rommanager.developerid=cyanogenmodnightly
-else
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.rommanager.developerid=cyanogenmod
 endif
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
@@ -143,7 +135,6 @@ PRODUCT_PACKAGES += \
     DSPManager \
     libcyanogen-dsp \
     audio_effects.conf \
-    CMWallpapers \
     Apollo \
     CMFileManager \
     LockClock \
@@ -216,7 +207,7 @@ endif
 
 PRODUCT_PACKAGE_OVERLAYS += vendor/jafier/overlay/common
 
-PRODUCT_VERSION_MAJOR = 11
+PRODUCT_VERSION_MAJOR = 1.1
 PRODUCT_VERSION_MINOR = 0
 PRODUCT_VERSION_MAINTENANCE = 0-RC0
 
@@ -228,36 +219,6 @@ ifndef JAF_BUILDTYPE
         RELEASE_TYPE := $(shell echo $(RELEASE_TYPE) | sed -e 's|^JAF_||g')
         JAF_BUILDTYPE := $(RELEASE_TYPE)
     endif
-endif
-
-# Filter out random types, so it'll reset to UNOFFICIAL
-ifeq ($(filter RELEASE NIGHTLY SNAPSHOT EXPERIMENTAL,$(JAF_BUILDTYPE)),)
-    JAF_BUILDTYPE :=
-endif
-
-ifdef JAF_BUILDTYPE
-    ifneq ($(JAF_BUILDTYPE), SNAPSHOT)
-        ifdef JAF_EXTRAVERSION
-            # Force build type to EXPERIMENTAL
-            JAF_BUILDTYPE := EXPERIMENTAL
-            # Remove leading dash from JAF_EXTRAVERSION
-            JAF_EXTRAVERSION := $(shell echo $(JAF_EXTRAVERSION) | sed 's/-//')
-            # Add leading dash to JAF_EXTRAVERSION
-            JAF_EXTRAVERSION := -$(JAF_EXTRAVERSION)
-        endif
-    else
-        ifndef JAF_EXTRAVERSION
-            # Force build type to EXPERIMENTAL, SNAPSHOT mandates a tag
-            JAF_BUILDTYPE := EXPERIMENTAL
-        else
-            # Remove leading dash from JAF_EXTRAVERSION
-            JAF_EXTRAVERSION := $(shell echo $(JAF_EXTRAVERSION) | sed 's/-//')
-            # Add leading dash to JAF_EXTRAVERSION
-            JAF_EXTRAVERSION := -$(JAF_EXTRAVERSION)
-        endif
-    endif
-else
-    JAF_VERSION := Jafier-$(shell date -u +%Y%m%d)-$(JAF_BUILD)$(JAF_EXTRAVERSION)
 endif
 
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -287,7 +248,7 @@ endif
 endif
 
 PRODUCT_PROPERTY_OVERRIDES += \
-  ro.cm.display.version=$(JAF_DISPLAY_VERSION)
+  ro.jaf.display.version=$(JAF_DISPLAY_VERSION)
 
 -include $(WORKSPACE)/build_env/image-auto-bits.mk
 
